@@ -1,4 +1,5 @@
 import React, {Component} from 'react'
+import SearchBtn from './SearchBtn'
 import Shelves from './Shelves'
 
 class Bookcase extends Component {
@@ -17,9 +18,7 @@ class Bookcase extends Component {
                 <Shelves />
               </div>
             </div>
-            <div className="open-search">
-              <a onClick={() => this.setState({ showSearchPage: true })}>Add a book</a>
-            </div>
+            <SearchBtn />
           </div>
       </div>
     )
