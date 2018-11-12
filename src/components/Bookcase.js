@@ -1,8 +1,22 @@
 import React, {Component} from 'react'
 import SearchBtn from './SearchBtn'
 import Shelves from './Shelves'
+import { getAll } from '../BooksAPI'
 
 class Bookcase extends Component {
+  async componenDidUpdate() {
+    const getBooks = getAll();
+    this.props.addBooks(getBooks);
+  } catch(error) {
+    console.log(error);
+  }
+
+  state = {
+    books:[],
+    currentlyReading:[],
+    wantToRead:[],
+    read:[]
+  }
 
   render() {
     return (
@@ -13,9 +27,9 @@ class Bookcase extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <Shelves />
-                <Shelves />
-                <Shelves />
+                <Shelves name="Currently Reading"/>
+                <Shelves name="Want to Read"/>
+                <Shelves name="Read"/>
               </div>
             </div>
             <SearchBtn />
