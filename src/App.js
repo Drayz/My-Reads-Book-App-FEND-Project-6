@@ -1,24 +1,63 @@
-import React from 'react'
-import BookCase from './components/Bookcase'
-// import * as BooksAPI from './BooksAPI'
-import './App.css'
+import React from "react";
+import BookCase from "./components/Bookcase";
+import * as BooksAPI from "./BooksAPI";
+import Search from "./components/Search";
+import { Route } from "react-router-dom";
+import "./App.css";
 
 class BooksApp extends React.Component {
   state = {
-    /**
-     * TODO: Instead of using this state variable to keep track of which page
-     * we're on, use the URL in the browser's address bar. This will ensure that
-     * users can use the browser's back and forward buttons to navigate between
-     * pages, as well as provide a good URL they can bookmark and share.
-     */
-    showSearchPage: false
+    books: []
+  };
+
+  componentWillMount = () => {
+    BooksAPI.getAll()
+      .then(res => {
+        this.setState(
+          { books: res },
+          () => console.log(this.state)
+        );
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
+
+  handleQuery = (book, shelf) => {
+    this.setState({ query: shelf});
+    this.placeBook(book, shelf);
   }
+
+  // <-- want to make use of BooksAPI `update` function
+  placeBook = (book, shelf) => {
+    console.log(book, shelf);
+    BooksAPI.update(book, shelf);
+    // and pass as props from App down to Book, ultimately
+    // BooksAPI(book, shelf)...
+    // flesh out rest of this method to ensure the main page updates after a book is placed -- note that this
+    // will also need to happen when a SearchPage book is placed using this method, too (Don't Repeat Yourself -- use this method on SearchPage, passed
+    // as a prop below)
+  };
+
+  // search on searchPage
 
   render() {
     return (
-      <BookCase />
-    )
+      <div>
+        <Route
+          exact
+          path="/"
+          render={() => (
+            <BookCase placeBook={this.placeBook} books={this.state.books} />
+          )}
+        />
+        <Route
+          path="/search"
+          render={() => <Search placeBook={this.placeBook} />}
+        />
+      </div>
+    );
   }
 }
 
-export default BooksApp
+export default BooksApp;

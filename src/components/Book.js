@@ -1,7 +1,9 @@
-import React, {Component} from 'react'
+import React, { Component } from "react";
 
 class Book extends Component {
+
   render() {
+    const { book } = this.props;
     return (
       <li>
         <div className="book">
@@ -11,11 +13,20 @@ class Book extends Component {
               style={{
                 width: 128,
                 height: 193,
-                backgroundImage: 'url("http://books.google.com/books/content?id=uu1mC6zWNTwC&printsec=frontcover&img=1&zoom=1&imgtk=AFLRE73pGHfBNSsJG9Y8kRBpmLUft9O4BfItHioHolWNKOdLavw-SLcXADy3CPAfJ0_qMb18RmCa7Ds1cTdpM3dxAGJs8zfCfm8c6ggBIjzKT7XR5FIB53HHOhnsT7a0Cc-PpneWq9zX&source=gbs_api")' }}>
-            </div>
+                backgroundImage: `url(${
+                  // a default image was used -- errors were thrown when
+                  // attempting to pull books from the API when they didn't have an image.
+                  book.imageLinks
+                    ? book.imageLinks.thumbnail
+                    : "https://3.bp.blogspot.com/-s3yBaPBn8Hc/Uh4-wAZOQLI/AAAAAAAAJT8/GY9d_VJFm3o/s200/play-books-no-cover.jpg"
+                })`
+              }}
+            />
             <div className="book-shelf-changer">
-              <select>
-                <option value="move" disabled>Move to...</option>
+              <select onChange={e => {this.props.handleQuery(this.props.book, e.target.value);}}>
+                <option value="move" disabled>
+                  Move to...
+                </option>
                 <option value="currentlyReading">Currently Reading</option>
                 <option value="wantToRead">Want to Read</option>
                 <option value="read">Read</option>
@@ -23,11 +34,11 @@ class Book extends Component {
               </select>
             </div>
           </div>
-          <div className="book-title">1776</div>
-          <div className="book-authors">David McCullough</div>
+          <div className="book-title">{book.title}</div>
+          <div className="book-authors">{book.authors}</div>
         </div>
       </li>
-    )
+    );
   }
 }
 
