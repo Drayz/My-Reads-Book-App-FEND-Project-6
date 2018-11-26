@@ -12,19 +12,36 @@ class Search extends Component {
     searchBooks: []
   };
 
+  //Function handles the state of the query
+  //after a input value is placed
   handleQuery = e => {
     const value = e.target.value;
+    console.log(value);
+    this.setState({query: value});
     this.searchBooks(value);
     // setState of query === value
     // invoke searchBooks(value)
   };
 
+  placeBook = (book, shelf) => {
+    console.log(book, shelf);
+    BooksAPI.update(book, shelf)
+    .then( resp => {
+      book.shelf = shelf;
+      this.setState(state => ({books: state.books.filter(b => b.id !== book.id).concat(book)
+      }));
+    });
+  }
+
   searchBooks = value => {
     BooksAPI.search(value).then(res => {
       this.props.books.forEach(book => {
         res.forEach(newBook => {
+          console.log(newBook);
           if (book.id === newBook.id) {
             newBook.shelf = book.shelf;
+          } else {
+            newBook.shelf = 'none'
           }
           return newBook;
         });
