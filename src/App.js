@@ -10,34 +10,33 @@ class BooksApp extends React.Component {
     books: []
   };
 
+  //Making an Api call to Books.API to get the book data
+  //if it cannot get the data then we have a catch error
   componentDidMount = () => {
     BooksAPI.getAll()
-      .then(res => {this.setState({ books: res },
-          () => console.log(this.state)
-        );
+      .then(res => {
+        this.setState({ books: res }, () => console.log(this.state));
       })
       .catch(error => {
         console.log(error);
       });
   };
 
+  //This functions places books on shelf based on option selected
   placeBook = (book, shelf) => {
     console.log(book, shelf);
-    BooksAPI.update(book, shelf)
-    .then( resp => {
+    BooksAPI.update(book, shelf).then(resp => {
+      if (resp.error) {
+        this.setState({
+          books: []
+        });
+      }
       book.shelf = shelf;
-      this.setState(state => ({books: state.books.filter(b => b.id !== book.id).concat(book)
+      this.setState(state => ({
+        books: state.books.filter(b => b.id !== book.id).concat(book)
       }));
     });
-  }
-    // <-- want to make use of BooksAPI `update` function
-    // and pass as props from App down to Book, ultimately
-    // flesh out rest of this method to ensure the main page updates after a book is placed -- note that this
-    // will also need to happen when a SearchPage book is placed using this method, too (Don't Repeat Yourself -- use this method on SearchPage, passed
-    // as a prop below)
-
-
-  // search on searchPage
+  };
 
   render() {
     return (
@@ -51,7 +50,9 @@ class BooksApp extends React.Component {
         />
         <Route
           path="/search"
-          render={() => <Search books={this.state.books} handleQuery={this.handleQuery} />}
+          render={() => (
+            <Search books={this.state.books} placeBook={this.placeBook} />
+          )}
         />
       </div>
     );
