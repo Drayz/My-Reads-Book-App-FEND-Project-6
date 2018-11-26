@@ -1,15 +1,13 @@
-import React, {Component} from 'react'
-import {Link} from 'react-router-dom'
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 class SearchBtn extends Component {
-  render(){
+  render() {
     return (
-      <div className='open-search'>
-        <Link to={'/search'}>
-           Add a book
-          </Link>
-       </div>
-    )
+      <div className="open-search">
+        <Link to="/search">Add a book</Link>
+      </div>
+    );
   }
 }
 
