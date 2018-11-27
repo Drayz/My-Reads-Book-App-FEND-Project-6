@@ -33,6 +33,8 @@ export default class Search extends Component {
           this.props.books.map(oldBook => {
             if (newBook.id === oldBook.id) {
               newBook.shelf = oldBook.shelf;
+            } else {
+            newBook.shelf = 'none'
             }
             return newBook;
           });
