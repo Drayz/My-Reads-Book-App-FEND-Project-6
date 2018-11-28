@@ -18,30 +18,29 @@ export default class Search extends Component {
   };
 
   scanBooks = query => {
-    //This handle the state of the query if the input is blank
-    //then set the state of the scanBooks to an empty array.
-    if (query === "") {
-      this.setState({
-        scanBooks: []
-      });
-    } else {
-      //We call on the BookAPI.search method
-      BooksAPI.search(query).then(scanBooks => {
-        scanBooks.forEach(newBook => {
-          //This compares the book.ids of oldbooks on shelf
-          // and the newbook in the query
-          this.props.books.forEach(oldBook => {
-            if (newBook.id === oldBook.id) {
-              return newBook.shelf = oldBook.shelf;
-            }
+    BooksAPI.search(query.trim(), 20).then(scanBooks => {
+      if (!scanBooks) {
+        this.setState({
+          scanBooks: []
+        });
+        return;
+      } else {
+        if (scanBooks.length > 0) {
+          const newBooks = scanBooks.map(newBook => {
+            this.props.books.forEach(oldBook => {
+              if (newBook.id === oldBook.id) {
+                newBook.shelf = oldBook.shelf;
+              }
+              return newBook;
+            });
             return newBook;
           });
-        });
-        this.setState({
-          scanBooks
-        });
-      });
-    }
+          this.setState({
+            scanBooks: newBooks
+          });
+        }
+      }
+    });
   };
 
   render() {
