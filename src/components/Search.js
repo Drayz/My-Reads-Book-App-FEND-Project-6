@@ -27,14 +27,12 @@ export default class Search extends Component {
     } else {
       //We call on the BookAPI.search method
       BooksAPI.search(query).then(scanBooks => {
-        scanBooks.map(newBook => {
+        scanBooks.forEach(newBook => {
           //This compares the book.ids of oldbooks on shelf
           // and the newbook in the query
-          this.props.books.map(oldBook => {
+          this.props.books.find(oldBook => {
             if (newBook.id === oldBook.id) {
-              newBook.shelf = oldBook.shelf;
-            } else {
-            newBook.shelf = 'none'
+              return newBook.shelf = oldBook.shelf;
             }
             return newBook;
           });
