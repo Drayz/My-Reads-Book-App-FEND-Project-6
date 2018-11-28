@@ -30,7 +30,7 @@ export default class Search extends Component {
         scanBooks.forEach(newBook => {
           //This compares the book.ids of oldbooks on shelf
           // and the newbook in the query
-          this.props.books.find(oldBook => {
+          this.props.books.forEach(oldBook => {
             if (newBook.id === oldBook.id) {
               return newBook.shelf = oldBook.shelf;
             }
